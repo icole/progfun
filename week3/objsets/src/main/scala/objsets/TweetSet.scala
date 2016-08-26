@@ -67,7 +67,7 @@ abstract class TweetSet {
     * Question: Should we implment this method here, or should it remain abstract
     * and be implemented in the subclasses?
     */
-  def mostRetweeted: Tweet = ???
+  def mostRetweeted: Tweet
 
   /**
     * Returns a list containing all tweets of this set, sorted by retweet count
@@ -113,6 +113,8 @@ class Empty extends TweetSet {
 
   def union(that: TweetSet): TweetSet = that
 
+  def mostRetweeted: Tweet = throw new java.util.NoSuchElementException
+
   /**
     * The following methods are already implemented
     */
@@ -124,6 +126,8 @@ class Empty extends TweetSet {
   def remove(tweet: Tweet): TweetSet = this
 
   def foreach(f: Tweet => Unit): Unit = ()
+
+  def isEmpty: Boolean = true
 }
 
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
@@ -132,7 +136,15 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     if (p(elem)) right.filterAcc(p, left.filterAcc(p, acc)).incl(elem)
     else right.filterAcc(p, left.filterAcc(p, acc))
 
-  def union(that: TweetSet): TweetSet = this
+  def union(that: TweetSet): TweetSet =
+    this.filterAcc((tweet) => true, that)
+
+  def mostRetweeted: Tweet = elem
+
+  def mostRetweetwedAcc(max: Tweet): Tweet =
+    if (isEmpty) max
+    else if (elem.retweets > max.retweets) elem
+    else max
 
   /**
     * The following methods are already implemented
@@ -159,6 +171,8 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     left.foreach(f)
     right.foreach(f)
   }
+
+  def isEmpty: Boolean = false
 }
 
 trait TweetList {
