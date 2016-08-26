@@ -65,6 +65,12 @@ class TweetSetSuite extends FunSuite {
     }
   }
 
+  test("retweeted acc: with set6") {
+    new TestSets {
+      assert(set6.mostRetweetedAcc(c).retweets == 30)
+    }
+  }
+
   test("retweeted: with set6") {
     new TestSets {
       assert(set6.mostRetweeted.retweets == 30)
